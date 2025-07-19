@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading Menu...</p>
+    </div>
+
+    <!-- Table Selection -->
+    <div id="table-selector" class="table-selector">
+        <div class="selector-card">
+            <h2>Select Your Table</h2>
+            <div class="table-grid" id="tableGrid"></div>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="menu-app" class="menu-app" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <h1>🍽️ Restaurant Menu</h1>
+                <div class="table-badge">Table #<span id="tableNumber">-</span></div>
+            </div>
+            
+            <!-- Search -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search dishes...">
+            </div>
+
+            <!-- Service Buttons -->
+            <div class="service-buttons">
+                <button onclick="requestService('water')">💧 Water</button>
+                <button onclick="requestService('waiter')">👨‍💼 Waiter</button>
+                <button onclick="requestService('bill')">🧾 Bill</button>
+            </div>
+        </header>
+
+        <!-- Categories -->
+        <nav class="categories" id="categories"></nav>
+
+        <!-- Menu Items -->
+        <main class="menu-content">
+            <div id="menuItems" class="menu-items"></div>
+        </main>
+
+        <!-- Cart Float Button -->
+        <div id="cartFloat" class="cart-float" style="display: none;">
+            <button onclick="openCart()">
+                🛒 <span id="cartCount">0</span> - ₹<span id="cartTotal">0</span>
+            </button>
+        </div>
+
+        <!-- Session Summary -->
+        <div class="session-bar">
+            <div class="session-info">
+                <span id="sessionItems">0 items ordered</span>
+                <span id="sessionTotal">₹0 total</span>
+            </div>
+            <button onclick="endSession()" class="end-session-btn">End Session</button>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Your Cart</h3>
+                <span class="close" onclick="closeCart()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="cartItems"></div>
+                <div id="cartSummary" class="cart-summary">
+                    <div class="summary-row">
+                        <span>Total:</span>
+                        <span>₹<span id="modalTotal">0</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeCart()">Continue Shopping</button>
+                <button onclick="placeOrder()" class="primary">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✅ Order Placed!</h3>
+            </div>
+            <div class="modal-body">
+                <p>Your order has been sent to the kitchen.</p>
+                <p>Estimated time: <strong>15-20 minutes</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeSuccess()" class="primary">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
