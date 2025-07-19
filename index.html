@@ -2,111 +2,298 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Premium digital restaurant menu with QR code ordering system">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Premium Restaurant Menu</title>
+    
+    <!-- Premium fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Loading Screen -->
-    <div id="loading" class="loading">
-        <div class="spinner"></div>
-        <p>Loading Menu...</p>
-    </div>
-
-    <!-- Table Selection -->
-    <div id="table-selector" class="table-selector">
-        <div class="selector-card">
-            <h2>Select Your Table</h2>
-            <div class="table-grid" id="tableGrid"></div>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="premium-loader">
+                <div class="loader-ring"></div>
+                <div class="loader-ring"></div>
+                <div class="loader-ring"></div>
+            </div>
+            <h2>🍽️ Loading Premium Menu</h2>
+            <p>Preparing your dining experience...</p>
         </div>
     </div>
 
-    <!-- Main Menu -->
-    <div id="menu-app" class="menu-app" style="display: none;">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-top">
-                <h1>🍽️ Restaurant Menu</h1>
-                <div class="table-badge">Table #<span id="tableNumber">-</span></div>
+    <!-- Table Selector Modal -->
+    <!-- Add this to your customer-menu/index.html if missing -->
+<div id="table-selector-overlay" class="table-selector-overlay">
+    <div class="table-selector-modal">
+        <div class="selector-header">
+            <h2>🍽️ Welcome!</h2>
+            <p>Please select your table number to begin your dining session</p>
+        </div>
+        <div class="table-grid" id="table-grid">
+            <!-- Table buttons will be generated dynamically -->
+        </div>
+    </div>
+</div>
+
+
+    <!-- Main Menu Container -->
+    <div class="menu-container" id="menu-container">
+        <!-- Elegant Session Header -->
+        <header class="menu-header">
+            <div class="session-info">
+                <div class="restaurant-branding">
+                    <h1 class="restaurant-name" id="restaurant-name">🍽️ Premium Restaurant</h1>
+                    <div class="session-status">Active Dining Session</div>
+                </div>
+                <div class="table-info">
+                    <span class="table-number">Table #<span id="table-number">-</span></span>
+                    <div class="session-time" id="session-time">Session: 0:00</div>
+                </div>
             </div>
             
-            <!-- Search -->
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search dishes...">
+            <!-- Service Request Buttons -->
+            <div class="service-requests">
+                <button class="service-btn" onclick="customerMenu.requestService('water')" id="water-btn">
+                    💧 Water
+                </button>
+                <button class="service-btn" onclick="customerMenu.requestService('napkin')" id="napkin-btn">
+                    🧻 Napkins
+                </button>
+                <button class="service-btn" onclick="customerMenu.requestService('waiter')" id="waiter-btn">
+                    👨‍💼 Waiter
+                </button>
             </div>
-
-            <!-- Service Buttons -->
-            <div class="service-buttons">
-                <button onclick="requestService('water')">💧 Water</button>
-                <button onclick="requestService('waiter')">👨‍💼 Waiter</button>
-                <button onclick="requestService('bill')">🧾 Bill</button>
+            
+            <!-- Premium Search Bar -->
+            <div class="search-container">
+                <input type="text" id="menu-search" placeholder="🔍 Search dishes, ingredients..." 
+                       onkeyup="customerMenu.searchMenu(event)" autocomplete="off">
+                <div class="search-suggestions" id="search-suggestions"></div>
+                <div class="search-filters" id="search-filters" style="display: none;">
+                    <button class="filter-btn" onclick="customerMenu.filterBy('vegetarian')">🥬 Veg</button>
+                    <button class="filter-btn" onclick="customerMenu.filterBy('spicy')">🌶️ Spicy</button>
+                    <button class="filter-btn" onclick="customerMenu.filterBy('recommended')">⭐ Recommended</button>
+                </div>
             </div>
         </header>
 
-        <!-- Categories -->
-        <nav class="categories" id="categories"></nav>
+        <!-- Category Navigation -->
+        <nav class="category-nav" id="category-nav">
+            <div class="category-scroll" id="category-scroll">
+                <button class="category-btn active" onclick="customerMenu.filterByCategory('all')">
+                    All Items
+                </button>
+                <!-- Dynamic categories will be loaded here -->
+            </div>
+        </nav>
 
-        <!-- Menu Items -->
+        <!-- Menu Content -->
         <main class="menu-content">
-            <div id="menuItems" class="menu-items"></div>
+            <!-- Recommendations Banner -->
+            <section class="recommendations-banner" id="recommendations-banner" style="display: none;">
+                <div class="banner-header">
+                    <h3>⭐ Today's Chef Recommendations</h3>
+                    <p>Specially curated for your taste</p>
+                </div>
+                <div class="recommended-items" id="recommended-items"></div>
+            </section>
+
+            <!-- Menu Items Section -->
+            <section id="menu-items" class="menu-items">
+                <div class="loading-state" id="menu-loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading delicious menu items...</p>
+                    <span>Please wait while we prepare your options</span>
+                </div>
+                
+                <div class="empty-menu" id="empty-menu" style="display: none;">
+                    <div class="empty-icon">🍽️</div>
+                    <h3>Menu Currently Unavailable</h3>
+                    <p>Our chef is preparing something special. Please check back in a moment!</p>
+                </div>
+            </section>
         </main>
 
-        <!-- Cart Float Button -->
-        <div id="cartFloat" class="cart-float" style="display: none;">
-            <button onclick="openCart()">
-                🛒 <span id="cartCount">0</span> - ₹<span id="cartTotal">0</span>
+        <!-- Floating Cart Button -->
+        <div class="cart-float" id="cart-float" style="display: none;">
+            <button class="cart-btn pulse-glow" onclick="customerMenu.viewCart()">
+                <span class="cart-icon">🛒</span>
+                <div class="cart-info">
+                    <span class="cart-count" id="cart-count">0</span>
+                    <span class="cart-total">₹<span id="cart-total">0</span></span>
+                </div>
+                <div class="cart-pulse"></div>
             </button>
         </div>
+    </div>
 
-        <!-- Session Summary -->
-        <div class="session-bar">
-            <div class="session-info">
-                <span id="sessionItems">0 items ordered</span>
-                <span id="sessionTotal">₹0 total</span>
+    <!-- Session Controls Footer -->
+    <div class="session-controls" id="session-controls">
+        <div class="session-summary">
+            <div class="session-stats">
+                <div class="session-items" id="session-items">0 items ordered</div>
+                <div class="session-total" id="session-total">Session Total: ₹0</div>
             </div>
-            <button onclick="endSession()" class="end-session-btn">End Session</button>
+            <div class="session-progress">
+                <div class="progress-bar" id="session-progress"></div>
+            </div>
+        </div>
+        <div class="session-actions">
+            <button class="btn-continue" onclick="customerMenu.viewCart()" style="display: none;" id="continue-btn">
+                🛒 View Cart
+            </button>
+            <button class="btn-end-session" onclick="customerMenu.confirmEndSession()" id="end-session-btn">
+                🧾 Ask for Bill
+            </button>
         </div>
     </div>
 
     <!-- Cart Modal -->
-    <div id="cartModal" class="modal">
-        <div class="modal-content">
+    <div id="cart-modal" class="modal-overlay">
+        <div class="modal-container cart-modal-container">
             <div class="modal-header">
-                <h3>Your Cart</h3>
-                <span class="close" onclick="closeCart()">&times;</span>
+                <h2>🛒 Your Current Order</h2>
+                <button class="close-btn" onclick="customerMenu.closeCart()">&times;</button>
             </div>
+            
             <div class="modal-body">
-                <div id="cartItems"></div>
-                <div id="cartSummary" class="cart-summary">
-                    <div class="summary-row">
-                        <span>Total:</span>
-                        <span>₹<span id="modalTotal">0</span></span>
+                <div id="cart-items" class="cart-items">
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <p>Your cart is empty</p>
+                        <span>Add some delicious items to get started!</span>
+                    </div>
+                </div>
+                
+                <div class="cart-summary" id="cart-summary" style="display: none;">
+                    <div class="summary-section">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>₹<span id="subtotal">0</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Items:</span>
+                            <span id="item-count">0</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <strong>Order Total:</strong>
+                            <strong>₹<span id="modal-total">0</span></strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-notes" style="display: none;" id="order-notes-section">
+                    <label for="order-notes">Special Instructions (Optional):</label>
+                    <textarea id="order-notes" placeholder="Any special requests? (e.g., extra spicy, no onions...)"></textarea>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="customerMenu.closeCart()">
+                    Continue Shopping
+                </button>
+                <button class="btn-primary" onclick="customerMenu.placeOrder()" id="place-order-btn">
+                    Send to Kitchen 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div id="item-modal" class="modal-overlay">
+        <div class="modal-container item-modal-container">
+            <div class="modal-header">
+                <button class="close-btn" onclick="customerMenu.closeItemModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="item-modal-body">
+                <!-- Item details will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div id="confirmation-modal" class="modal-overlay">
+        <div class="modal-container success-modal-container">
+            <div class="modal-header">
+                <div class="success-icon luxury-bounce">✅</div>
+                <h2 id="confirmation-title">Order Sent to Kitchen!</h2>
+            </div>
+            
+            <div class="modal-body">
+                <div class="confirmation-details">
+                    <p id="confirmation-message">Your order has been successfully sent to our kitchen.</p>
+                    <div class="order-details" id="confirmation-order-details"></div>
+                    <div class="timing-info">
+                        <p>⏱️ Estimated preparation time: <span id="prep-time">15-20 minutes</span></p>
+                        <p>📱 You'll be notified when your order is ready</p>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button onclick="closeCart()">Continue Shopping</button>
-                <button onclick="placeOrder()" class="primary">Place Order</button>
+            
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="customerMenu.closeConfirmationModal()">
+                    Continue Dining
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
+    <!-- End Session Confirmation Modal -->
+    <div id="end-session-modal" class="modal-overlay">
+        <div class="modal-container">
             <div class="modal-header">
-                <h3>✅ Order Placed!</h3>
+                <h2>🧾 End Dining Session?</h2>
+                <button class="close-btn" onclick="customerMenu.closeEndSessionModal()">&times;</button>
             </div>
+            
             <div class="modal-body">
-                <p>Your order has been sent to the kitchen.</p>
-                <p>Estimated time: <strong>15-20 minutes</strong></p>
+                <div class="session-summary-final">
+                    <p>Are you ready to finish your dining experience and receive your bill?</p>
+                    <div class="final-summary" id="final-session-summary"></div>
+                    <div class="session-warning">
+                        <p>⚠️ Once you end the session, you won't be able to add more items to your order.</p>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button onclick="closeSuccess()" class="primary">Continue</button>
+            
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="customerMenu.closeEndSessionModal()">
+                    Continue Dining
+                </button>
+                <button class="btn-primary" onclick="customerMenu.endSession()" id="confirm-end-btn">
+                    Yes, Generate Bill
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- Service Request Confirmation -->
+    <div id="service-confirmation" class="service-toast" style="display: none;">
+        <div class="toast-content">
+            <span class="toast-icon">✅</span>
+            <span class="toast-message" id="service-message">Service requested</span>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="error-toast" class="error-toast" style="display: none;">
+        <div class="toast-content">
+            <span class="toast-icon">❌</span>
+            <span class="toast-message" id="error-message">Something went wrong</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
     <script type="module" src="script.js"></script>
 </body>
 </html>
