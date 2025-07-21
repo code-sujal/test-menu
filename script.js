@@ -158,6 +158,7 @@ class CustomerMenu {
                 price: item.price,
                 imageUrl: item.imageUrl,
                 category: item.category,
+                description: item.description, // Keep description for cart
                 quantity: 1
             });
         }
@@ -545,7 +546,7 @@ class CustomerMenu {
                 const categoryItems = items[category].filter(item => {
                     const searchLower = this.searchTerm.toLowerCase();
                     return item.name.toLowerCase().includes(searchLower) ||
-                           item.description.toLowerCase().includes(searchLower);
+                           (item.description && item.description.toLowerCase().includes(searchLower));
                 });
                 
                 if (categoryItems.length > 0) {
@@ -581,67 +582,63 @@ class CustomerMenu {
         }
     }
 
+    // --- START: UPDATED HTML GENERATION FUNCTIONS ---
+
     createCategorySection(category, items) {
         if (!items || items.length === 0) return '';
         
         const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
         
+        // UPDATED to use <ul> and a different class
         let sectionHTML = `
             <div class="menu-section">
                 <div class="section-header">
                     <h2 class="section-title">${categoryName}</h2>
                     <span class="section-count">${items.length} items</span>
                 </div>
-                <div class="items-grid">
+                <ul class="items-list">
         `;
         
         items.forEach(item => {
-            sectionHTML += this.createMenuItemCard(item);
+            sectionHTML += this.createMenuItemCard(item); // This function is now different
         });
         
-        sectionHTML += '</div></div>';
+        sectionHTML += '</ul></div>';
         return sectionHTML;
     }
 
     createMenuItemCard(item) {
-        const badges = this.getItemBadges(item);
         const cartItem = this.cart.find(cartItem => cartItem.id === item.id);
         const quantity = cartItem ? cartItem.quantity : 0;
-        const prepTime = this.estimatePrepTime(item.category);
         
+        // UPDATED HTML structure for a list item
         return `
-            <div class="menu-item-card" onclick="customerMenu.showItemDetails('${item.id}')">
-                <div class="item-image-container">
+            <li class="menu-item-list-entry" onclick="customerMenu.showItemDetails('${item.id}')">
+                <div class="item-image-container-list">
                     ${item.imageUrl ? 
-                        `<img src="${item.imageUrl}" alt="${item.name}" class="item-image">` :
-                        '<div class="no-image">🍽️</div>'
+                        `<img src="${item.imageUrl}" alt="${item.name}" class="item-image-list">` :
+                        '<div class="no-image-list">🍽️</div>'
                     }
-                    ${badges.length > 0 ? 
-                        `<div class="item-badges">${badges.join('')}</div>` : ''
-                    }
-                    <div class="prep-time">⏱️ ${prepTime}</div>
                 </div>
-                
-                <div class="item-content">
-                    <div class="item-header">
-                        <h3 class="item-name">${item.name}</h3>
-                        <span class="item-price">₹${item.price}</span>
+                <div class="item-content-list">
+                    <div class="item-header-list">
+                        <h3 class="item-name-list">${item.name}</h3>
+                        <span class="item-price-list">₹${item.price}</span>
                     </div>
-                    
-                    <p class="item-description">${item.description}</p>
-                    
-                    ${this.getItemFeatures(item)}
-                    
-                    <div class="item-actions" onclick="event.stopPropagation();">
+                    <p class="item-description-list">${item.description || ''}</p>
+                    <div class="item-actions-list" onclick="event.stopPropagation();">
                         ${quantity > 0 ? 
                             this.getQuantityControls(item.id, quantity) :
                             this.getAddToCartButton(item)
                         }
                     </div>
                 </div>
-            </div>
+            </li>
         `;
     }
+
+    // --- END: UPDATED HTML GENERATION FUNCTIONS ---
+
 
     getItemBadges(item) {
         const badges = [];
@@ -677,9 +674,10 @@ class CustomerMenu {
     }
 
     getAddToCartButton(item) {
+        // UPDATED to be a simpler button for the list view
         return `
             <button class="add-to-cart-btn" onclick="customerMenu.addToCart('${item.id}')">
-                Add to Cart • ₹${item.price}
+                Add
             </button>
         `;
     }
@@ -718,7 +716,7 @@ class CustomerMenu {
         const allItems = Object.values(this.menuItems).flat();
         const matches = allItems.filter(item => 
             item.name.toLowerCase().includes(searchTerm) ||
-            item.description.toLowerCase().includes(searchTerm)
+            (item.description && item.description.toLowerCase().includes(searchTerm))
         ).slice(0, 5);
         
         if (matches.length > 0) {
@@ -774,10 +772,11 @@ class CustomerMenu {
                     <span>Add some delicious items to get started!</span>
                 </div>
             `;
-            cartSummary.style.display = 'none';
+            if(cartSummary) cartSummary.style.display = 'none';
         } else {
             let cartHTML = '';
             this.cart.forEach(item => {
+                // UPDATED cart item HTML for consistency
                 cartHTML += `
                     <div class="cart-item">
                         <div class="cart-item-image">
@@ -788,20 +787,18 @@ class CustomerMenu {
                         </div>
                         <div class="cart-item-details">
                             <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">₹${item.price} × ${item.quantity} = ₹${item.price * item.quantity}</div>
                             <div class="cart-item-actions">
-                                <button class="quantity-btn" onclick="customerMenu.updateCartItem('${item.id}', ${item.quantity - 1})">−</button>
-                                <span class="quantity-display">${item.quantity}</span>
-                                <button class="quantity-btn" onclick="customerMenu.updateCartItem('${item.id}', ${item.quantity + 1})">+</button>
+                                ${this.getQuantityControls(item.id, item.quantity)}
                             </div>
                         </div>
+                        <div class="cart-item-price">₹${item.price * item.quantity}</div>
                     </div>
                 `;
             });
             
             cartItemsContainer.innerHTML = cartHTML;
             this.updateCartSummary();
-            cartSummary.style.display = 'block';
+            if(cartSummary) cartSummary.style.display = 'block';
         }
         
         modal.classList.add('active');

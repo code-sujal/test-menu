@@ -583,65 +583,110 @@ body {
     font-weight: var(--font-weight-medium);
 }
 
-.items-grid {
-    display: grid;
-    gap: var(--space-5);
+/* UPDATED: From items-grid to items-list */
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2); /* A small gap between list items */
 }
 
-/* Luxury Menu Item Cards */
-.menu-item-card {
+
+/* --- START: UPDATED MENU ITEM STYLES --- */
+/* This block replaces the old .menu-item-card styles */
+
+.menu-item-list-entry {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-secondary);
     background: var(--bg-card);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--border-secondary);
-    overflow: hidden;
     cursor: pointer;
-    transition: var(--transition-normal);
-    box-shadow: var(--shadow-card);
+    transition: background-color var(--transition-fast);
 }
 
-.menu-item-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--accent-gold);
+.menu-item-list-entry:hover {
+    background-color: var(--bg-tertiary);
 }
 
-.item-image-container {
+.item-image-container-list {
+    flex-shrink: 0;
     position: relative;
-    height: 180px;
-    overflow: hidden;
-    background: var(--bg-tertiary);
 }
 
-.item-image {
-    width: 100%;
-    height: 100%;
+.item-image-list {
+    width: 90px;
+    height: 90px;
     object-fit: cover;
-    transition: var(--transition-slow);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-secondary);
 }
 
-.menu-item-card:hover .item-image {
-    transform: scale(1.05);
-}
-
-.no-image {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+.no-image-list {
+    width: 90px;
+    height: 90px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-tertiary);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-light);
-    font-size: 48px;
+    font-size: 32px;
+    color: var(--text-muted);
 }
 
-.item-badges {
-    position: absolute;
-    top: var(--space-3);
-    left: var(--space-3);
+.item-content-list {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
+}
+
+.item-header-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: var(--space-2);
 }
+
+.item-name-list {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: var(--space-1);
+}
+
+.item-price-list {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.item-description-list {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    margin-bottom: var(--space-2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.item-actions-list {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Re-using quantity controls and add button styles */
+.item-actions-list .quantity-controls,
+.item-actions-list .add-to-cart-btn {
+    margin-top: var(--space-2);
+}
+
+/* --- END: UPDATED MENU ITEM STYLES --- */
+
 
 .badge {
     padding: var(--space-1) var(--space-3);
@@ -683,47 +728,6 @@ body {
     backdrop-filter: blur(4px);
 }
 
-/* Enhanced Item Content */
-.item-content {
-    padding: var(--space-5);
-}
-
-.item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: var(--space-3);
-    gap: var(--space-4);
-}
-
-.item-name {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    line-height: 1.3;
-    flex: 1;
-    letter-spacing: -0.01em;
-}
-
-.item-price {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--accent-gold);
-    white-space: nowrap;
-    letter-spacing: -0.01em;
-}
-
-.item-description {
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: 1.5;
-    margin-bottom: var(--space-4);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
 .item-features {
     display: flex;
     gap: var(--space-2);
@@ -740,16 +744,6 @@ body {
     color: var(--text-tertiary);
     font-weight: var(--font-weight-medium);
     text-transform: capitalize;
-}
-
-/* Premium Item Actions */
-.item-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: var(--space-5);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border-secondary);
 }
 
 .quantity-controls {
@@ -1057,7 +1051,9 @@ body {
     background: var(--bg-tertiary);
 }
 
-/* Enhanced Cart Modal */
+/* --- START: UPDATED CART ITEM STYLES --- */
+/* This block updates the .cart-item styles for consistency */
+
 .cart-items {
     max-height: 380px;
     overflow-y: auto;
@@ -1088,16 +1084,23 @@ body {
 }
 
 .cart-item-image {
-    width: 70px;
-    height: 70px;
-    border-radius: var(--radius-lg);
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
 }
 
 .cart-item-details {
-    flex: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .cart-item-name {
@@ -1119,6 +1122,24 @@ body {
     align-items: center;
     gap: var(--space-3);
 }
+
+/* Making cart quantity controls smaller */
+.cart-item .quantity-controls {
+    gap: var(--space-2);
+    padding: var(--space-1);
+}
+.cart-item .quantity-btn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-sm);
+}
+.cart-item .quantity-display {
+    font-size: var(--font-size-sm);
+    min-width: 20px;
+}
+
+/* --- END: UPDATED CART ITEM STYLES --- */
+
 
 .cart-summary {
     border-top: 1px solid var(--border-primary);
@@ -1459,4 +1480,3 @@ body {
         transition-duration: 0.01ms !important;
     }
 }
-

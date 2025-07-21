@@ -25,7 +25,7 @@
                 <div class="loader-ring"></div>
                 <div class="loader-ring"></div>
             </div>
-            <h2>🍽️ Loading Premium Menu</h2>
+            <h2>Loading Premium Menu</h2>
             <p>Preparing your dining experience...</p>
         </div>
     </div>
@@ -35,7 +35,7 @@
 <div id="table-selector-overlay" class="table-selector-overlay">
     <div class="table-selector-modal">
         <div class="selector-header">
-            <h2>🍽️ Welcome!</h2>
+            <h2>Welcome!</h2>
             <p>Please select your table number to begin your dining session</p>
         </div>
         <div class="table-grid" id="table-grid">
@@ -51,7 +51,7 @@
         <header class="menu-header">
             <div class="session-info">
                 <div class="restaurant-branding">
-                    <h1 class="restaurant-name" id="restaurant-name">🍽️ Premium Restaurant</h1>
+                    <h1 class="restaurant-name" id="restaurant-name">Premium Restaurant</h1>
                     <div class="session-status">Active Dining Session</div>
                 </div>
                 <div class="table-info">
@@ -63,25 +63,25 @@
             <!-- Service Request Buttons -->
             <div class="service-requests">
                 <button class="service-btn" onclick="customerMenu.requestService('water')" id="water-btn">
-                    💧 Water
+                    Water
                 </button>
                 <button class="service-btn" onclick="customerMenu.requestService('napkin')" id="napkin-btn">
-                    🧻 Napkins
+                    Napkins
                 </button>
                 <button class="service-btn" onclick="customerMenu.requestService('waiter')" id="waiter-btn">
-                    👨‍💼 Waiter
+                    Waiter
                 </button>
             </div>
             
             <!-- Premium Search Bar -->
             <div class="search-container">
-                <input type="text" id="menu-search" placeholder="🔍 Search dishes, ingredients..." 
+                <input type="text" id="menu-search" placeholder="Search dishes, ingredients..." 
                        onkeyup="customerMenu.searchMenu(event)" autocomplete="off">
                 <div class="search-suggestions" id="search-suggestions"></div>
                 <div class="search-filters" id="search-filters" style="display: none;">
-                    <button class="filter-btn" onclick="customerMenu.filterBy('vegetarian')">🥬 Veg</button>
-                    <button class="filter-btn" onclick="customerMenu.filterBy('spicy')">🌶️ Spicy</button>
-                    <button class="filter-btn" onclick="customerMenu.filterBy('recommended')">⭐ Recommended</button>
+                    <button class="filter-btn" onclick="customerMenu.filterBy('vegetarian')">Veg</button>
+                    <button class="filter-btn" onclick="customerMenu.filterBy('spicy')">Spicy</button>
+                    <button class="filter-btn" onclick="customerMenu.filterBy('recommended')">Recommended</button>
                 </div>
             </div>
         </header>
@@ -101,7 +101,7 @@
             <!-- Recommendations Banner -->
             <section class="recommendations-banner" id="recommendations-banner" style="display: none;">
                 <div class="banner-header">
-                    <h3>⭐ Today's Chef Recommendations</h3>
+                    <h3>Today's Chef Recommendations</h3>
                     <p>Specially curated for your taste</p>
                 </div>
                 <div class="recommended-items" id="recommended-items"></div>
@@ -116,7 +116,7 @@
                 </div>
                 
                 <div class="empty-menu" id="empty-menu" style="display: none;">
-                    <div class="empty-icon">🍽️</div>
+                    <div class="empty-icon">🍽️  </div>
                     <h3>Menu Currently Unavailable</h3>
                     <p>Our chef is preparing something special. Please check back in a moment!</p>
                 </div>
@@ -149,10 +149,10 @@
         </div>
         <div class="session-actions">
             <button class="btn-continue" onclick="customerMenu.viewCart()" style="display: none;" id="continue-btn">
-                🛒 View Cart
+                View Cart
             </button>
             <button class="btn-end-session" onclick="customerMenu.confirmEndSession()" id="end-session-btn">
-                🧾 Ask for Bill
+                Ask for Bill
             </button>
         </div>
     </div>
@@ -161,7 +161,7 @@
     <div id="cart-modal" class="modal-overlay">
         <div class="modal-container cart-modal-container">
             <div class="modal-header">
-                <h2>🛒 Your Current Order</h2>
+                <h2>Your Current Order</h2>
                 <button class="close-btn" onclick="customerMenu.closeCart()">&times;</button>
             </div>
             
@@ -202,14 +202,14 @@
                     Continue Shopping
                 </button>
                 <button class="btn-primary" onclick="customerMenu.placeOrder()" id="place-order-btn">
-                    Send to Kitchen 🚀
+                    Send to Kitchen
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Item Details Modal -->
-    <div id="item-modal" class="modal-overlay">
+    <!-- <div id="item-modal" class="modal-overlay">
         <div class="modal-container item-modal-container">
             <div class="modal-header">
                 <button class="close-btn" onclick="customerMenu.closeItemModal()">&times;</button>
@@ -217,15 +217,15 @@
             
             <div class="modal-body" id="item-modal-body">
                 <!-- Item details will be loaded dynamically -->
-            </div>
+            <!-- </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Order Confirmation Modal -->
     <div id="confirmation-modal" class="modal-overlay">
         <div class="modal-container success-modal-container">
             <div class="modal-header">
-                <div class="success-icon luxury-bounce">✅</div>
+                <div class="success-icon luxury-bounce"></div>
                 <h2 id="confirmation-title">Order Sent to Kitchen!</h2>
             </div>
             
@@ -234,8 +234,8 @@
                     <p id="confirmation-message">Your order has been successfully sent to our kitchen.</p>
                     <div class="order-details" id="confirmation-order-details"></div>
                     <div class="timing-info">
-                        <p>⏱️ Estimated preparation time: <span id="prep-time">15-20 minutes</span></p>
-                        <p>📱 You'll be notified when your order is ready</p>
+                        <p> Estimated preparation time: <span id="prep-time">15-20 minutes</span></p>
+                        <p>You'll be notified when your order is ready</p>
                     </div>
                 </div>
             </div>
@@ -252,7 +252,7 @@
     <div id="end-session-modal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header">
-                <h2>🧾 End Dining Session?</h2>
+                <h2>End Dining Session?</h2>
                 <button class="close-btn" onclick="customerMenu.closeEndSessionModal()">&times;</button>
             </div>
             
@@ -261,7 +261,7 @@
                     <p>Are you ready to finish your dining experience and receive your bill?</p>
                     <div class="final-summary" id="final-session-summary"></div>
                     <div class="session-warning">
-                        <p>⚠️ Once you end the session, you won't be able to add more items to your order.</p>
+                        <p>Once you end the session, you won't be able to add more items to your order.</p>
                     </div>
                 </div>
             </div>
