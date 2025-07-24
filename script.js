@@ -767,7 +767,9 @@ class CustomerMenu {
         if (this.cart.length === 0) {
             cartItemsContainer.innerHTML = `
                 <div class="empty-cart">
-                    <div class="empty-cart-icon">🛒</div>
+                    <div class="empty-cart-icon"><span class="material-symbols-outlined">
+shopping_cart_checkout
+</span></div>
                     <p>Your cart is empty</p>
                     <span>Add some delicious items to get started!</span>
                 </div>
@@ -929,34 +931,14 @@ class CustomerMenu {
         const quantity = cartItem ? cartItem.quantity : 0;
         
         modalBody.innerHTML = `
-            <div class="item-detail-content">
-                <div class="item-detail-image">
-                    ${item.imageUrl ? 
-                        `<img src="${item.imageUrl}" alt="${item.name}">` :
-                        `<div class="no-image-large">🍽️</div>`
-                    }
-                    ${badges.length > 0 ? `<div class="item-badges">${badges.join('')}</div>` : ''}
-                </div>
-                
-                <div class="item-detail-info">
-                    <h2>${item.name}</h2>
-                    <p class="item-detail-price">₹${item.price}</p>
-                    <p class="item-detail-description">${item.description}</p>
-                    
-                    <div class="item-detail-actions">
-                        ${quantity > 0 ? `
-                            <div class="quantity-controls">
-                                <button class="quantity-btn" onclick="customerMenu.updateCartItem('${item.id}', ${quantity - 1}); customerMenu.updateItemModal('${item.id}');">−</button>
-                                <span class="quantity-display" id="modal-quantity-${item.id}">${quantity}</span>
-                                <button class="quantity-btn" onclick="customerMenu.updateCartItem('${item.id}', ${quantity + 1}); customerMenu.updateItemModal('${item.id}');">+</button>
-                            </div>
-                        ` : `
-                            <button class="add-to-cart-btn" onclick="customerMenu.addToCart('${item.id}'); customerMenu.closeItemModal();">
-                                Add to Cart - ₹${item.price}
-                            </button>
-                        `}
-                    </div>
-                </div>
+            <div class="item-modal-image-container">
+                <img src="${item.imageUrl}" alt="${item.name}">
+            </div>
+            <div class="item-modal-details">
+                <h2>${item.name}</h2>
+                <p>${item.description}</p>
+                <div class="item-modal-price">₹${item.price}</div>
+                <!-- Add more details as needed -->
             </div>
         `;
         

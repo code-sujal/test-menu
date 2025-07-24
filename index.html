@@ -6,6 +6,9 @@
     <meta name="description" content="Premium digital restaurant menu with QR code ordering system">
     <meta name="theme-color" content="#1a1a2e">
     <title>Premium Restaurant Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
     
     <!-- Premium fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,6 +82,7 @@
         <nav class="category-nav" id="category-nav">
             <div class="category-scroll" id="category-scroll">
                 <button class="category-btn active" onclick="customerMenu.filterByCategory('all')">
+                    <span class="material-symbols-outlined" style="vertical-align: middle; font-size: 20px;">menu</span>
                     All Items
                 </button>
                 <!-- Dynamic categories will be loaded here -->
@@ -90,10 +94,19 @@
             <!-- Recommendations Banner -->
             <section class="recommendations-banner" id="recommendations-banner" style="display: none;">
                 <div class="banner-header">
-                    <h3>Today's Chef Recommendations</h3>
-                    <p>Specially curated for your taste</p>
+                    <span class="material-symbols-outlined">
+crown
+</span>
+                    <div>
+                        <h3>Chef's Top Picks</h3>
+                        <p>Handpicked favorites just for you</p>
+                    </div>
                 </div>
                 <div class="recommended-items" id="recommended-items"></div>
+                <div class="banner-cta">
+                    <span class="material-symbols-outlined">local_fire_department</span>
+                    <span>Try something new today!</span>
+                </div>
             </section>
 
             <!-- Menu Items Section -->
